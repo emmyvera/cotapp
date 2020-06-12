@@ -11,8 +11,11 @@ app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 
 // Routes
-const homeRoute = require("./routes/home")
+const homeRoute = require("./routes/home");
 app.use("/home", homeRoute);
+
+const bibleStudyRoute = require("./routes/bibleStudy");
+app.use("/bibleStudy", bibleStudyRoute);
 
 app.listen(config.PORT, () => { 
     mongoose.connect(config.MONGODB_URI, 
