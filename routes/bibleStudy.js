@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const BibleStudy = require("../model/bibleStudy");
-const { route } = require("./home");
 
 //Get BibleStudy
 router.get("/", async (req, res) => {
@@ -73,7 +72,7 @@ router.put("/:id", async(req, res) => {
     }
 });
 
-//TODO Delete BibleStudy
+// Delete BibleStudy
 router.delete("/:id", async (req, res) => {
     try{
         const bibleStudyDel = await BibleStudy.findOneAndDelete({_id:req.params.id});
