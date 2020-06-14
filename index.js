@@ -19,6 +19,10 @@ app.use("/bibleStudy", bibleStudyRoute);
 const audioRoute = require("./routes/audio");
 app.use("/audio", audioRoute);
 
+const academyRoute = require("./routes/academy");
+app.use("/academy", academyRoute);
+
+//Starting Backend
 app.listen(config.PORT, () => { 
     mongoose.connect(config.MONGODB_URI, 
         {useNewUrlParser: true}
