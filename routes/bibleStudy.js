@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const BibleStudy = require("../model/bibleStudy");
+const { ensureAuthenticated } = require("../config/auth");
 
 //Get BibleStudy
 router.get("/", async (req, res) => {
@@ -34,7 +35,7 @@ router.get("/:id", async(req, res) => {
 });
 
 // Post New BibleStudy
-router.post("/", async(req, res) => {
+router.post("/", ensureAuthenticated, async(req, res) => {
     const { topic, bibleText, aim, introduction, discussion, personalApp, conclusion, gVerse, category, fileLink } = req.body;
 
     //FIXME Updating Files
@@ -60,7 +61,7 @@ router.post("/", async(req, res) => {
 });
 
 // Update BibleStudy
-router.put("/:id", async(req, res) => {
+router.put("/:id", ensureAuthenticated, async(req, res) => {
 
     try{
         const bibleStudySave = await BibleStudy.findOneAndUpdate(
@@ -73,7 +74,7 @@ router.put("/:id", async(req, res) => {
 });
 
 // Delete BibleStudy
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ensureAuthenticated, async (req, res) => {
     try{
         const bibleStudyDel = await BibleStudy.findOneAndDelete({_id:req.params.id});
         res.send(200);

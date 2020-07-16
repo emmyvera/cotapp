@@ -36,7 +36,7 @@ const BibleStudySchema = new Schema({
     
     personalApp: {
         type: String,
-        default: "Start Applying What You've Learnt today",
+        default: "Start Applying What You've Learnt Today",
         trim: true
     },
     

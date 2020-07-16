@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Home = require("../model/home");
-
+const { ensureAuthenticated } = require("../config/auth");
 //Get Home Route
 router.get("/", async (req, res) => {
 
@@ -19,7 +19,15 @@ router.get("/", async (req, res) => {
 //Get Single Home Route
 router.get("/:id", async (req, res) => {
     try{
-        const homeInfo = await Home.findById(req.params.id)
+        
+        const homeInfo = await Home.findById(req.params.id, (err) => {
+            if(err){
+                res.json({
+                    message:"File not found"
+                }).status(404)  
+            }         
+        })
+
         res.json({
             success: true,
             Home: homeInfo,
@@ -32,7 +40,7 @@ router.get("/:id", async (req, res) => {
 
 // Post Home Route
 //FIXME Uploading Files
-router.post("/", async(req, res) => {
+router.post("/", ensureAuthenticated, async(req, res) => {
    
     const { title, details, pic, author } = req.body;
 
@@ -53,7 +61,7 @@ router.post("/", async(req, res) => {
 });
 
 //Put Home Route
-router.put("/:id", async(req, res) => {
+router.put("/:id", ensureAuthenticated, async(req, res) => {
    
     try{
         const homeSave = await Home.findOneAndUpdate(
@@ -68,7 +76,7 @@ router.put("/:id", async(req, res) => {
 });
 
 // Delete Home Route
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ensureAuthenticated, async (req, res) => {
     try{
         const homeDel = await Home.findOneAndDelete(
             {_id:req.params.id});

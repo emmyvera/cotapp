@@ -18,7 +18,7 @@ const HomeSchema = new Schema({
 
     pic: {
         type: String,
-        default:"cotpics"
+        default:"cotpics.jpg"
     },
     
     author: {
