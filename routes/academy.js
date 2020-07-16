@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const Academy = require("../model/academy");
+const { ensureAuthenticated } = require("../config/auth");
+
 
 // Get Academy
-router.get("/", async (req, res) => {
+router.get("/", ensureAuthenticated, async (req, res) => {
 
     try{
         const academyInfo = await Academy.find({})
@@ -17,7 +19,7 @@ router.get("/", async (req, res) => {
 })
 
 //TODO Get Single Academy
-router.get("/:id", async (req, res) => {
+router.get("/:id", ensureAuthenticated, async (req, res) => {
     try{
         const academyInfo = await Academy.findOne({_id: req.params.id});
         res.json({
@@ -31,7 +33,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //TODO Post Academy
-router.post("/", async (req, res) => {
+router.post("/", ensureAuthenticated, async (req, res) => {
     const { title, details, level, faculty, dept, fileType, fileCategory, fileLink } = req.body;
 
     const academyDetails = new Academy({
@@ -54,7 +56,7 @@ router.post("/", async (req, res) => {
 });
 
 //TODO Update Academy 
-router.put("/:id", async (req, res) => {
+router.put("/:id", ensureAuthenticated, async (req, res) => {
     
     try{
         const academySave = await Academy.findOneAndUpdate({_id:req.params.id},
@@ -66,7 +68,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //TODO Delete Academy
-router.delete("/:id", async(req, res) => {
+router.delete("/:id", ensureAuthenticated, async(req, res) => {
     try{
         const academyDel = await Academy.findOneAndDelete({_id: req.params.id})
         res.send(200)

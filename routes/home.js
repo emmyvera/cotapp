@@ -52,7 +52,11 @@ router.post("/", ensureAuthenticated, async(req, res) => {
     });
 
     try{
-        const homeSave = await home.save()
+        const homeSave = await home.save((err) => {
+            if(err){
+                res.send("Not Created")
+            }
+        })
         res.send(201)
     }catch(err){
         //TODO HAndle 404 errors
@@ -66,7 +70,9 @@ router.put("/:id", ensureAuthenticated, async(req, res) => {
     try{
         const homeSave = await Home.findOneAndUpdate(
             {_id:req.params.id}, 
-            req.body
+            req.body, (err)=> {
+                res.sendStatus(404)
+            }
         );
         res.send(200)
     }catch(err){
@@ -79,7 +85,11 @@ router.put("/:id", ensureAuthenticated, async(req, res) => {
 router.delete("/:id", ensureAuthenticated, async (req, res) => {
     try{
         const homeDel = await Home.findOneAndDelete(
-            {_id:req.params.id});
+            {_id:req.params.id}, (err)=> {
+                if (err) {
+                    res.sendStatus(404)
+                }
+            });
         res.send(200)
     }catch(err){
         console.log(err)

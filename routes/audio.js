@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const Audio = require("../model/audio");
+const { ensureAuthenticated } = require("../config/auth");
 
 
 // Get Audio
-router.get("/", async (req, res) => {
+router.get("/", ensureAuthenticated, async (req, res) => {
 
     try{
         const audioInfo = await Audio.find({});
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get Single Audio
-router.get("/:id", async (req, res) => {
+router.get("/:id", ensureAuthenticated, async (req, res) => {
     
     try{
         const audioInfo = await Audio.findOne({_id:req.params.id})
@@ -36,7 +37,7 @@ router.get("/:id", async (req, res) => {
 }) 
 
 // Post Audio
-router.post("/", async (req, res) => {
+router.post("/", ensureAuthenticated, async (req, res) => {
 
     const{ title, author, image, shortDescription, fileLink } = req.body;
 
@@ -57,7 +58,7 @@ router.post("/", async (req, res) => {
 }); 
 
 // Update Audio 
-router.put("/:id", async (req, res) => {
+router.put("/:id", ensureAuthenticated, async (req, res) => {
 
     try{
         const audioSave = await Audio.findOneAndUpdate({_id:req.params.id},
@@ -69,7 +70,7 @@ router.put("/:id", async (req, res) => {
 }); 
 
 // Delete Audio
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", ensureAuthenticated, async (req, res) => {
     try{
         const audioDel = await Audio.findOneAndDelete({_id:req.params.id})
         res.send(200)

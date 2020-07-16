@@ -2,9 +2,10 @@ const router = require("express").Router()
 const Admin = require("../../model/admin")
 const bcrypt = require("bcryptjs")
 const passport = require("passport")
+const { ensureAuthenticated } = require("../../config/auth");
 
 //Get all admin
-router.get("/", async(req, res) => {
+router.get("/", ensureAuthenticated, async(req, res) => {
     try{
         const admin = await Admin.find({}, (err) => {
             if(err){
@@ -23,7 +24,7 @@ router.get("/", async(req, res) => {
 })
 
 //Create an Admin
-router.post("/", async(req, res) => {
+router.post("/", ensureAuthenticated, async(req, res) => {
     try{
         const { username, email, password } = req.body;
         emailCheck = await Admin.findOne({email:email})
@@ -64,7 +65,7 @@ router.post("/", async(req, res) => {
 })
 
 // Delete Admin Account
-router.delete("/:id", async(req, res) => {
+router.delete("/:id", ensureAuthenticated, async(req, res) => {
     try{
         const delAdmin = await Admin.findOneAndRemove({_id:req.params.id}, (err)=> {
             if (err) {
@@ -84,39 +85,22 @@ router.delete("/:id", async(req, res) => {
 
 // Login Handle
 router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-
-        if (err) {
-            console.log("ERROR : " + err);
-            return next(err);
-        }
-
-        if(user){ 
-            console.log("User Exists!")
-            //All the data of the user can be accessed by user.x
-            res.json({message : "Successful"});
-            return;
-
-        } else {
-            res.json({message : "Failed"});
-            return;
-        }
-
-
-    })(req, res, next)
+    passport.authenticate("local", {
+    
+    },)(req, res, next)
 
 });
 
 router.get("/logout", (req, res) => {
     req.logout()
     res.json({
-        message: "Successfully LogOut"
+        message: "Successfully Logout"
     })
 });
 
 
 // To Delete All File
-// router.delete("/all", async(req,res) => {
+// router.delete("/all", ensureAuthenticated, async(req,res) => {
 //     try{
 //         const delAllAdmin = await Admin.deleteMany({}, (err)=> {
 //             if (err) {

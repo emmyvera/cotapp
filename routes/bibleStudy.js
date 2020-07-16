@@ -23,7 +23,11 @@ router.get("/", async (req, res) => {
 // Get Single BibleStudy
 router.get("/:id", async(req, res) => {
     try{
-        const bibleStudyInfo = await BibleStudy.findOne({_id: req.params.id})
+        const bibleStudyInfo = await BibleStudy.findOne({_id: req.params.id}, (err) => {
+            if (err){
+                res.sendStatus(404)
+            }
+        })
         res.json({
             success:true,
             BibleStudy: bibleStudyInfo,
@@ -53,7 +57,11 @@ router.post("/", ensureAuthenticated, async(req, res) => {
     })
 
     try{
-        const bibleStudySave = await bibleInfo.save();
+        const bibleStudySave = await bibleInfo.save((err) => {
+            if(err){
+                res.send("Not Created")
+            }
+        });
         res.send(201);
     }catch(err){
         console.log(err)
@@ -66,7 +74,11 @@ router.put("/:id", ensureAuthenticated, async(req, res) => {
     try{
         const bibleStudySave = await BibleStudy.findOneAndUpdate(
             {_id:req.params.id},
-            req.body);
+            req.body,(err)=>{
+                if (err) {
+                    res.send("Not Created")
+                }
+            });
         res.send(200);
     }catch(err){
         console.log(err)
@@ -76,7 +88,11 @@ router.put("/:id", ensureAuthenticated, async(req, res) => {
 // Delete BibleStudy
 router.delete("/:id", ensureAuthenticated, async (req, res) => {
     try{
-        const bibleStudyDel = await BibleStudy.findOneAndDelete({_id:req.params.id});
+        const bibleStudyDel = await BibleStudy.findOneAndDelete({_id:req.params.id}, (err) => {
+            if (err) {
+                res.sendStatus(404)
+            }
+        });
         res.send(200);
     }catch(err){
         console.log(err)
