@@ -16,16 +16,27 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/list", async (req, res) => {
+    try{
+        const homeInfo = await Home.find({});
+        res.json(
+            homeInfo
+        );
+    }catch(err){
+
+    }
+})
+
 //Get Single Home Route
 router.get("/:id", async (req, res) => {
     try{
-        
+
         const homeInfo = await Home.findById(req.params.id, (err) => {
             if(err){
                 res.json({
                     message:"File not found"
-                }).status(404)  
-            }         
+                }).status(404)
+            }
         })
 
         res.json({
@@ -41,7 +52,7 @@ router.get("/:id", async (req, res) => {
 // Post Home Route
 //FIXME Uploading Files
 router.post("/", ensureAuthenticated, async(req, res) => {
-   
+
     const { title, details, pic, author } = req.body;
 
     const home = new Home({
@@ -66,10 +77,10 @@ router.post("/", ensureAuthenticated, async(req, res) => {
 
 //Put Home Route
 router.put("/:id", ensureAuthenticated, async(req, res) => {
-   
+
     try{
         const homeSave = await Home.findOneAndUpdate(
-            {_id:req.params.id}, 
+            {_id:req.params.id},
             req.body, (err)=> {
                 res.sendStatus(404)
             }

@@ -6,7 +6,7 @@ const { ensureAuthenticated } = require("../config/auth");
 router.get("/", async (req, res) => {
     try{
         const bibleStudyInfo = await BibleStudy.find({});
-        
+
         res.json({
             success:true,
             BibleStudy: bibleStudyInfo,
@@ -17,8 +17,18 @@ router.get("/", async (req, res) => {
     }catch(err){
         console.log(err)
     }
-    
 });
+
+router.get("/list", async (req, res) => {
+    try{
+        const studyInfo = await BibleStudy.find({});
+        res.json(
+            studyInfo
+        );
+    }catch(err){
+
+    }
+})
 
 // Get Single BibleStudy
 router.get("/:id", async(req, res) => {
