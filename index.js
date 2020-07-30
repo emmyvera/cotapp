@@ -4,6 +4,7 @@ const config = require("./config")
 const session = require("express-session");
 const passport = require("passport");
 const app = express();
+require('dotenv').config();
 
 //Middleware
 // Passport config
@@ -43,7 +44,7 @@ app.use("/admin", adminRoute);
 
 //Starting Backend
 app.listen(config.PORT, () => { 
-    mongoose.connect(config.MONGODB_URI, 
+    mongoose.connect(config.MONGODB_URI,
         {useNewUrlParser: true}
     );
     console.log(`listening on http://localhost:${config.PORT}`)});
